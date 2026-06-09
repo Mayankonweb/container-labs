@@ -34,9 +34,7 @@ One controller, one OpenFlow switch, three hosts on `10.0.0.0/24`.
 ### Prerequisites
 - Docker and [containerlab](https://containerlab.dev/install/) installed.
 - The Open vSwitch kernel module available on the host:
-  ```bash
-  sudo modprobe openvswitch
-  ```
+  
   (If your host can't load it, see *Troubleshooting* — there's a one-line
   userspace fallback.)
 
@@ -52,8 +50,10 @@ apps/firewall.py    # exercise 3: firewall
 
 ### Build the two images
 ```bash
+cd sdn/sdn-tutorial
 docker build -t sdn-node:latest -f Dockerfile.node .
 docker build -t sdn-ryu:latest  -f Dockerfile.ryu  .
+cd ..
 ```
 
 ### Deploy the lab
@@ -125,11 +125,11 @@ docker exec -it clab-sdn-h1 ping -c 4 10.0.0.2
 Ping works. Now look at the controller terminal: you get a `PacketIn ... FLOOD`
 log line for **every packet** (each echo request and reply, plus ARP).
 
-**iperf** - for throughput test
+**Host 3 terminal:** iperf server setup - for throughput test
 ```bash
  docker exec -it clab-sdn-h3 iperf3 -s
 ```
-change terminal
+**Host 1 terminal:**
 
 ```bash
  docker exec -it clab-sdn-h1 iperf3 -c 10.0.0.3 -t 10
@@ -157,7 +157,7 @@ docker exec -it clab-sdn-s1 ovs-ofctl -O OpenFlow13 del-flows br0
 docker exec -it clab-sdn-ctrl ryu-manager ryu.app.simple_switch_13
 ```
 
-**Host terminal:**
+**Host 1 terminal:**
 ```bash
 docker exec -it clab-sdn-h1 ping -c 4 10.0.0.2
 ```
@@ -165,11 +165,11 @@ Watch the difference: the controller logs only the **first** packet or two,
 then goes quiet. Once it has learned which MAC lives on which port, it installs
 a flow rule and the switch handles the rest by itself.
 
-**iperf** - for throughput test
+**Host 3 terminal:** iperf server setup - for throughput test
 ```bash
  docker exec -it clab-sdn-h3 iperf3 -s
 ```
-change terminal
+**Host 1 terminal:**
 
 ```bash
  docker exec -it clab-sdn-h1 iperf3 -c 10.0.0.3 -t 10

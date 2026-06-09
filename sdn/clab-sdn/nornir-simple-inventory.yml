@@ -1,0 +1,26 @@
+---
+ctrl:
+    username: 
+    password: 
+    platform: linux
+    hostname: 175.20.20.10
+h1:
+    username: 
+    password: 
+    platform: linux
+    hostname: 175.20.20.4
+h2:
+    username: 
+    password: 
+    platform: linux
+    hostname: 175.20.20.3
+h3:
+    username: 
+    password: 
+    platform: linux
+    hostname: 175.20.20.2
+s1:
+    username: 
+    password: 
+    platform: linux
+    hostname: 175.20.20.5
