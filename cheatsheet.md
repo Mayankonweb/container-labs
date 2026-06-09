@@ -2,6 +2,91 @@
 
 ## The 20 Commands You'll Use 90% of the Time
 
+## 0. Build a Custom Docker Image
+
+If you have a Dockerfile in a folder and want Containerlab nodes to use that image:
+
+```bash
+docker build -t <image-name>:latest <folder_name>
+```
+
+Example:
+
+```bash
+docker build -t network-lab:latest .
+```
+
+Verify the image exists:
+
+```bash
+docker images
+```
+
+Example output:
+
+```text
+REPOSITORY    TAG      IMAGE ID
+network-lab   latest   abc123def456
+```
+
+You can then reference this image in your topology:
+
+```yaml
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: network-lab:latest
+```
+
+---
+
+## 0.1 Install Networking Tools Inside Running Nodes
+
+Many minimal Linux images do not include tools such as:
+
+* tcpdump
+* ping
+* traceroute
+* iperf3
+
+Install them after deployment:
+
+```bash
+sudo docker exec clab-linear-client sh -c "apk add --no-cache tcpdump iputils iperf3 traceroute"
+```
+
+```bash
+sudo docker exec clab-linear-router sh -c "apk add --no-cache tcpdump iputils iperf3 traceroute"
+```
+
+```bash
+sudo docker exec clab-linear-server sh -c "apk add --no-cache tcpdump iputils iperf3 traceroute"
+```
+
+Verify installation:
+
+```bash
+docker exec -it clab-linear-client sh
+```
+
+```bash
+which tcpdump
+which ping
+which traceroute
+which iperf3
+```
+
+Expected:
+
+```text
+/usr/sbin/tcpdump
+/bin/ping
+/usr/bin/traceroute
+/usr/bin/iperf3
+```
+
+
 ---
 
 ## 1. Start a Lab
